@@ -1,0 +1,1685 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"ResponseRoleDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"displayName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseUserDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"tenantId": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"surname": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"$ref": "#/components/schemas/ResponseRoleDto"
+						},
+						"type": "array"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"tenantId",
+					"name",
+					"email",
+					"roles",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_ResponseUserDto-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResponseUserDto"
+							}
+						],
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateUserDto": {
+				"properties": {
+					"tenantId": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"surname": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"createdBy": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"tenantId",
+					"name",
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_ResponseUserDto-Array-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"items": {
+							"$ref": "#/components/schemas/ResponseUserDto"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateUserDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"surname": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"updatedBy": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteUserDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_DeleteUserDto-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/DeleteUserDto"
+							}
+						],
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto__token-string--user-ResponseUserDto_-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"properties": {
+							"user": {
+								"$ref": "#/components/schemas/ResponseUserDto"
+							},
+							"token": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"user",
+							"token"
+						],
+						"type": "object",
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginDto": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"signUpDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"surname": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TenantResponseDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"displayName",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_TenantResponseDto-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/TenantResponseDto"
+							}
+						],
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateTenantDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"displayName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_TenantResponseDto-Array-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"items": {
+							"$ref": "#/components/schemas/TenantResponseDto"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateTenantDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteTenantDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_DeleteTenantDto-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/DeleteTenantDto"
+							}
+						],
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_ResponseRoleDto-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResponseRoleDto"
+							}
+						],
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateRoleDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					},
+					"createdBy": {
+						"type": "number",
+						"format": "double"
+					},
+					"deletedBy": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"displayName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_ResponseRoleDto-Array-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"items": {
+							"$ref": "#/components/schemas/ResponseRoleDto"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateRoleDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					},
+					"updatedBy": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteRoleDto": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_DeleteRoleDto-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/DeleteRoleDto"
+							}
+						],
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponceEdition": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"weeklyPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"monthlyPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"yearlyPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"weeklyPrice",
+					"monthlyPrice",
+					"yearlyPrice",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_ResponceEdition-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResponceEdition"
+							}
+						],
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateEditionDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"weeklyPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"monthlyPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"yearlyPrice": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"weeklyPrice",
+					"monthlyPrice",
+					"yearlyPrice"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto_ResponceEdition-Array-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"items": {
+							"$ref": "#/components/schemas/ResponceEdition"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateEditionDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"weeklyPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"monthlyPrice": {
+						"type": "number",
+						"format": "double"
+					},
+					"yearlyPrice": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseDto__success-boolean--message-string_-or-null_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"properties": {
+							"message": {
+								"type": "string"
+							},
+							"success": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"message",
+							"success"
+						],
+						"type": "object",
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "backend",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/users": {
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseUserDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserDto"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseUserDto-Array-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/users/{id}": {
+			"get": {
+				"operationId": "GetUserById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseUserDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseUserDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserDto"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_DeleteUserDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/users/tenant/{tenantId}": {
+			"get": {
+				"operationId": "GetUsersByTenant",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseUserDto-Array-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "tenantId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/users/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto__token-string--user-ResponseUserDto_-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/signup": {
+			"post": {
+				"operationId": "Signup",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto__token-string--user-ResponseUserDto_-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "x-tenant-id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/signUpDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/tenants": {
+			"post": {
+				"operationId": "CreateTenant",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_TenantResponseDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Tenant"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTenantDto"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllTenants",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_TenantResponseDto-Array-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Tenant"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/tenants/{id}": {
+			"get": {
+				"operationId": "GetTenantById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_TenantResponseDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Tenant"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateTenant",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_TenantResponseDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Tenant"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateTenantDto"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteTenant",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_DeleteTenantDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Tenant"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/tenants/name/{name}": {
+			"get": {
+				"operationId": "GetTenantByName",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_TenantResponseDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Tenant"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/roles": {
+			"post": {
+				"operationId": "CreateRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseRoleDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateRoleDto"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllRoles",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseRoleDto-Array-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/roles/{id}": {
+			"get": {
+				"operationId": "GetRoleById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseRoleDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseRoleDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateRoleDto"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_DeleteRoleDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/roles/name/{name}": {
+			"get": {
+				"operationId": "GetRoleByName",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponseRoleDto-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/editions": {
+			"post": {
+				"operationId": "CreateEdition",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponceEdition-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Edition"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateEditionDto"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllEditions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponceEdition-Array-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Edition"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/editions/{id}": {
+			"get": {
+				"operationId": "GetEditionById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponceEdition-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Edition"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateEdition",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_ResponceEdition-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Edition"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateEditionDto"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteEdition",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto__success-boolean--message-string_-or-null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Edition"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api"
+		}
+	]
+}
