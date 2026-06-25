@@ -6,12 +6,14 @@ import { JwtUtility } from "../shared/JwtUtility"; // Your JwtUtility import
 export interface CustomJwtPayload extends JwtPayload {
     userId: number;
     tenantId: number;
+    roles: string[];
 }
 
 export interface AuthRequest extends Request {
     user?: {
         userId: number;
         tenantId: number;
+        roles: string[];
     };
 }
 
@@ -41,7 +43,8 @@ export const authMiddleware = (
 
         req.user = {
             userId: decoded.userId,
-            tenantId: decoded.tenantId
+            tenantId: decoded.tenantId,
+            roles: decoded.roles || []
         };
 
         next();

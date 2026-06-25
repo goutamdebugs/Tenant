@@ -121,35 +121,58 @@ export class UserService {
   /**
    * Delete user
    */
-  public async deleteUser(id: number) {
+  //  currentUser parameter add currentUser er
+  public async deleteUser(id: number, currentUser: { userId: number, tenantId: number, roles: string[] }) {
     if (!id || id <= 0) {
       throw new UserFriendlyException("Invalid user ID", 400);
     }
 
-    // Check if user exists
-    const exists = await this.userRepo.exists(id);
-    if (!exists) {
+    // secqurity check
+    if (!currentUser.roles.includes('Head')) {
+      throw new UserFriendlyException("Access Denied: Only Tenant Head can delete users", 403);
+    }
+    //  
+    const targetUser = await this.userRepo.findById(id);
+    if (!targetUser) {
       throw new UserFriendlyException(`User with ID ${id} not found`, 404);
     }
 
-    const deleted = await this.userRepo.delete(id);
+    // head will delete own user or anoter tenant user
+    if (targetUser.tenantId !== currentUser.tenantId) {
+      throw new UserFriendlyException("Access Denied: You cannot delete users from another tenant", 403);
+    }
 
+    const deleted = await this.userRepo.delete(id);
     if (!deleted) {
       throw new UserFriendlyException("Failed to delete user", 500);
     }
 
-    return {
-      success: true,
-      message: "User deleted successfully"
-    };
+    return { success: true, message: "User deleted successfully" };
   }
 
   /**
    * Get users by tenant
    */
-  public async getUsersByTenant(tenantId: number): Promise<ResponseUserDto[]> {
+  /**
+   * Get users by tenant
+   */
+  public async getUsersByTenant(
+    tenantId: number,
+    currentUser: { userId: number; tenantId: number; roles: string[] }
+  ): Promise<ResponseUserDto[]> {
+
     if (!tenantId || tenantId <= 0) {
       throw new UserFriendlyException("Invalid tenant ID", 400);
+    }
+
+    // 🔒 Security Check 1: Check if user has 'Head' role
+    if (!currentUser.roles.includes('Head')) {
+      throw new UserFriendlyException("Access Denied: Only Tenant Head can view these users", 403);
+    }
+
+    // 🔒 Security Check 2: Check if Head is looking at their own tenant
+    if (tenantId !== currentUser.tenantId) {
+      throw new UserFriendlyException("Access Denied: You can only view users of your own organization", 403);
     }
 
     const users = await this.userRepo.findByTenantId(tenantId);
@@ -187,7 +210,7 @@ export class UserService {
 
   // ==================================================================================
 
-  public async authenticateUser(
+ public async authenticateUser(
     email: string,
     password: string
   ): Promise<{
@@ -195,35 +218,30 @@ export class UserService {
     user: ResponseUserDto;
   }> {
 
-
     if (!email || !password) {
       throw new UserFriendlyException("Email and password are required", 400);
     }
 
-
     const user = await this.userRepo.findByEmailWithPassword(email);
-    // ---------------------------------------------------------------
-  
-    // ---------------------------------------------------------------
-    // console.log(JSON.stringify(user, null, 2));
-
+    // console.log(user)
     if (!user) {
       throw new UserFriendlyException("Invalid email or password", 401);
     }
-
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       throw new UserFriendlyException("Invalid email or password", 401);
     }
-
+    const userPlain = user.toJSON(); 
+    // console.log(userPlain)
+    const roleNamesForToken = userPlain.roles ? userPlain.roles.map((r: any) => r.name) : [];
 
     const token = JwtUtility.generateToken({
       userId: user.id,
-      tenantId: user.tenantId
+      tenantId: user.tenantId,
+      roles: roleNamesForToken 
     });
-
 
     const mappedUser = mapper.map(
       user,
@@ -231,15 +249,11 @@ export class UserService {
       ResponseUserDto
     );
 
-    
-
     return {
       token,
       user: mappedUser
     };
-
   }
-
 
   // ==================================================================================
 
@@ -248,13 +262,12 @@ export class UserService {
   // -----------
 
   public async signUp(data: signUpDto & { tenantId: number }): Promise<{ token: string; user: ResponseUserDto }> {
-
-
     try {
       UserValidator.validateSignUp(data);
     } catch (validation: any) {
       throw new UserFriendlyException(validation.message, 400);
     }
+    
     const existingUser = await this.userRepo.findByEmail(data.email);
     if (existingUser) {
       throw new UserFriendlyException("User mail already exists");
@@ -263,24 +276,30 @@ export class UserService {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
+    const existingTenantUsers = await this.userRepo.findByTenantId(data.tenantId);
+    
+    const roleName = existingTenantUsers.length === 0 ? 'Head' : 'User';
+
     const newUser = await this.userRepo.create({
       ...data,
       password: hashedPassword
     });
 
+    const roleToAssign = await this.roleRepo.findByName(roleName);
 
-    const defaultRole = await this.roleRepo.findByName('User');
-    if (defaultRole) {
-      await this.userRepo.assignRole(newUser.id, defaultRole.id);
+    if (roleToAssign) {
+      await this.userRepo.assignRole(newUser.id, roleToAssign.id);
+      newUser.roles = [roleToAssign as any]; 
     }
 
+  
     const token = JwtUtility.generateToken({
       userId: newUser.id,
-      tenantId: newUser.tenantId
+      tenantId: newUser.tenantId,
+      roles: [roleName] 
     });
 
     const mappedUser = mapper.map(newUser, User, ResponseUserDto);
     return { token, user: mappedUser };
   }
-
 }

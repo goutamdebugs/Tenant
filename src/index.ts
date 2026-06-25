@@ -52,5 +52,20 @@ async function startServer() {
     process.exit(1);
   }
 }
-
+// async function clearAllData() {
+//   try {
+    
+//     const tables = ['"user_roles"', '"users"', '"tenants"', '"roles"', '"editions"', '"tenant_editions"']; 
+    
+//     for (const table of tables) {
+//       await sequelize.query(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE;`);
+//       console.log(`Table ${table} cleared!`);
+//     }
+    
+//     console.log("✅ All data cleared successfully!");
+//   } catch (error) {
+//     console.error("❌ Failed to clear data:", error);
+//   }
+// }
+// clearAllData();
 startServer();

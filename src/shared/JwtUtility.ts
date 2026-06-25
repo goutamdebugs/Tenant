@@ -13,7 +13,7 @@ export class JwtUtility {
     return process.env.JWT_SECRET;
   })();
 
-  public static generateToken(payload: { userId: number; tenantId: number }): string {
+  public static generateToken(payload: { userId: number; tenantId: number, roles: string[] }): string {
     return jwt.sign(payload, this.SECRET, { expiresIn: this.EXPIRES_IN });
   }
 

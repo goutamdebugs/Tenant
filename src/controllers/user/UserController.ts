@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Path, Route, Tags, Query, Header, Security} from "tsoa";
+import { Controller, Get, Post, Put, Delete, Body, Path, Route, Tags, Query, Header, Security, Request} from "tsoa";
 import { UserService } from "../../services/user/UserService";
 import { CreateUserDto } from "../../dtos/user/CreateUserDto";
 import { UpdateUserDto } from "../../dtos/user/UpdateUserDto";
@@ -50,19 +50,27 @@ export class UserController extends Controller {
   }
 
   // Delete User
+  @Security("jwt")
   @Delete("{id}")
   public async deleteUser(
-    @Path() id: number
+    @Path() id: number,
+    @Request() req: any,
+
   ): Promise<ResponseDto<DeleteUserDto | null>> {
-    return await ResponseDto.ReturnResult(() => this.userService.deleteUser(id));
+    return await ResponseDto.ReturnResult(() => this.userService.deleteUser(id, req.user));
   }
 
   // Get Users By Tenant ID
+  // Get Users By Tenant ID
+  @Security("jwt") 
   @Get("tenant/{tenantId}")
   public async getUsersByTenant(
-    @Path() tenantId: number
+    @Path() tenantId: number,
+    @Request() req: any 
   ): Promise<ResponseDto<ResponseUserDto[] | null>> {
-    return await ResponseDto.ReturnResult(() => this.userService.getUsersByTenant(tenantId));
+    return await ResponseDto.ReturnResult(() => 
+      this.userService.getUsersByTenant(tenantId, req.user)
+    );
   }
 
   // Login Authentication

@@ -55,12 +55,12 @@ export class UserRepo extends BaseRepo<User> {
 
   //  =======================
 
-  public async assignRole(userId: number, roleId: number): Promise<void> {
-    await UserRole.create({
-      userId: userId,
-      roleId: roleId
-    });
-  }
+  public async assignRole(userId: number, roleId: number) {
+  return await UserRole.findOrCreate({
+    where: { userId: userId, roleId: roleId }, 
+    defaults: { userId: userId, roleId: roleId }
+  });
+}
 
   // ========================
   // =============================================

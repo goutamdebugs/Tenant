@@ -142,26 +142,19 @@ private setupCreateRoute(): void {
   // DELETE /users/:id - Delete User
   
   private setupDeleteRoute(): void {
-    this.router.delete("/:id", async (req: Request, res: Response) => {
+    this.router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
       try {
-        // Fix: Convert params.id to string and then to number
         const idParam = req.params.id;
         const id = typeof idParam === 'string' ? parseInt(idParam, 10) : NaN;
 
         if (isNaN(id) || id <= 0) {
-          return res.status(400).json({
-            success: false,
-            error: "Invalid ID format. ID must be a positive number"
-          });
+          return res.status(400).json({ success: false, error: "Invalid ID format" });
         }
 
-        const result = await this.controller.deleteUser(id);
+        // 🌟 কন্ট্রোলারকে req পাস করে দেওয়া হলো
+        const result = await this.controller.deleteUser(id, req); 
         
-        res.json({
-          success: true,
-          data: result,
-          message: "User deleted successfully"
-        });
+        res.json({ success: true, data: result, message: "User deleted successfully" });
       } catch (error: any) {
         const status = this.controller.getStatus() || 500;
         res.status(status).json({
@@ -173,35 +166,32 @@ private setupCreateRoute(): void {
   }
 
 //GET    /users/tenant/:tenantId
+  //GET    /users/tenant/:tenantId
+// GET /users/tenant/:tenantId
   private setupGetUsersByTenantRoute(): void {
-  this.router.get("/tenant/:tenantId", async (req, res) => {
-    try {
-      const tenantId = Number(req.params.tenantId);
+    this.router.get("/tenant/:tenantId", authMiddleware, async (req: Request, res: Response) => {
+      try {
+        const tenantId = Number(req.params.tenantId);
 
-      if (isNaN(tenantId) || tenantId <= 0) {
-        return res.status(400).json({
-          success: false,
-          error: "Invalid tenant ID"
-        });
+        if (isNaN(tenantId) || tenantId <= 0) {
+          return res.status(400).json({ success: false, error: "Invalid tenant ID" });
+        }
+
+      
+        const result = await this.controller.getUsersByTenant(tenantId, req);
+
+        
+        const statusCode = result.StatusCode || (result.Success ? 200 : 400);
+        
+      
+        res.status(statusCode).json(result);
+
+      } catch (error: any) {
+        const status = this.controller.getStatus() || 500;
+        res.status(status).json({ success: false, error: error.message });
       }
-
-      const result = await this.controller.getUsersByTenant(tenantId);
-
-      res.json({
-        success: true,
-        data: result,
-        message: "Users fetched successfully"
-      });
-    } catch (error: any) {
-      const status = this.controller.getStatus() || 500;
-
-      res.status(status).json({
-        success: false,
-        error: error.message
-      });
-    }
-  });
-}
+    });
+  }
 //POST   /users/login
 private setupLoginRoute(): void {
   this.router.post("/login", async (req, res) => {
