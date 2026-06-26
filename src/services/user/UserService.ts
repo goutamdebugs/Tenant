@@ -11,6 +11,7 @@ import { signUpDto } from "../../dtos/user/SignUpDto";
 import { UserValidator } from "../../validation/UserValidations";
 import bcrypt from "bcrypt";
 import { createMap } from "@automapper/core";
+import { redisClient } from "../../cacse/RedisClient";
 // import Role from "../../db/models/Role";
 
 export class UserService {
@@ -146,7 +147,8 @@ export class UserService {
     if (!deleted) {
       throw new UserFriendlyException("Failed to delete user", 500);
     }
-
+    await redisClient.del(`tenant:${currentUser.tenantId}:users`);
+    console.log(`Cache cleared for tenant ${currentUser.tenantId} due to user deletion!`);
     return { success: true, message: "User deleted successfully" };
   }
 
@@ -156,7 +158,7 @@ export class UserService {
   /**
    * Get users by tenant
    */
-  public async getUsersByTenant(
+ public async getUsersByTenant(
     tenantId: number,
     currentUser: { userId: number; tenantId: number; roles: string[] }
   ): Promise<ResponseUserDto[]> {
@@ -165,18 +167,34 @@ export class UserService {
       throw new UserFriendlyException("Invalid tenant ID", 400);
     }
 
-    // 🔒 Security Check 1: Check if user has 'Head' role
     if (!currentUser.roles.includes('Head')) {
       throw new UserFriendlyException("Access Denied: Only Tenant Head can view these users", 403);
     }
 
-    // 🔒 Security Check 2: Check if Head is looking at their own tenant
     if (tenantId !== currentUser.tenantId) {
       throw new UserFriendlyException("Access Denied: You can only view users of your own organization", 403);
     }
 
+    
+    const cacheKey = `tenant:${tenantId}:users`;
+
+    
+    const cachedUsers = await redisClient.get(cacheKey);
+    
+    if (cachedUsers) {
+      console.log(`Fetching users for tenant ${tenantId} from Redis Cache `);
+
+      return JSON.parse(cachedUsers) as ResponseUserDto[];
+    }
+
+    console.log(`Fetching users for tenant ${tenantId} from Database `);
     const users = await this.userRepo.findByTenantId(tenantId);
-    return mapper.mapArray(users, User, ResponseUserDto);
+    const mappedUsers = mapper.mapArray(users, User, ResponseUserDto);
+
+    
+    await redisClient.setEx(cacheKey, 1800, JSON.stringify(mappedUsers));
+
+    return mappedUsers;
   }
 
   /**
@@ -300,6 +318,8 @@ export class UserService {
     });
 
     const mappedUser = mapper.map(newUser, User, ResponseUserDto);
+    await redisClient.del(`tenant:${data.tenantId}:users`); 
+    console.log(`Cache cleared for tenant ${data.tenantId} due to new signup!`);
     return { token, user: mappedUser };
   }
 }

@@ -2,6 +2,10 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import sequelize from "./config/database";
 import mainRouter from "./routes/index"; 
+import { redisClient } from "./cacse/RedisClient";
+
+
+
 
 // Import the auto-generated swagger.json file from TSOA.
 // Note: Adjust the path below based on where TSOA generates your swagger.json
@@ -37,7 +41,9 @@ app.get("/", (req, res) => {
 async function startServer() {
   try {
     await sequelize.authenticate();
+    await redisClient.connect();
     console.log("Database Connected Successfully");
+    console.log("Rsdis Connected Successfully");
 
     const PORT = process.env.PORT || 5000;
 
