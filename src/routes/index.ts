@@ -1,4 +1,6 @@
 import express from "express";
+import { AnalyticsRoute } from "./analytics/AnalyticsRoute";
+
 
 // Import Services
 import { EditionService } from "../services/edition/EditionService";
@@ -53,6 +55,11 @@ router.use("/users", userRoute.router);
 const roleService = new RoleService()
 const roleController = new RoleController(roleService)
 const roleRouter = new RoleRoute(roleController)
+
+// ============================================================================
+// Analytics Routes
+// ============================================================================
+router.use("/api/analytics", new AnalyticsRoute().router);
 
 router.use("/roles",roleRouter.router)
 

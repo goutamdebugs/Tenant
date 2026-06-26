@@ -865,6 +865,36 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ResponseDto_any_": {
+				"properties": {
+					"Error": {},
+					"Result": {
+						"nullable": true
+					},
+					"Success": {
+						"type": "boolean"
+					},
+					"TargetUrl": {
+						"type": "string",
+						"nullable": true
+					},
+					"UnAuthorizedRequest": {
+						"type": "boolean"
+					},
+					"StatusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"LogError": {}
+				},
+				"required": [
+					"Error",
+					"Success",
+					"UnAuthorizedRequest"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -1675,6 +1705,44 @@
 					{
 						"in": "path",
 						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/analytics/timeline/tenant/{tenantId}": {
+			"get": {
+				"operationId": "GetUserTimeline",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseDto_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Analytics"
+				],
+				"security": [
+					{
+						"jwt": [
+							"Head"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "tenantId",
 						"required": true,
 						"schema": {
 							"format": "double",
