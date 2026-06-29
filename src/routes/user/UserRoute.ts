@@ -21,9 +21,30 @@ export class UserRoute {
   this.setupLoginRoute();
   this.setupUpdateRoute();
   this.setupDeleteRoute();
-  this.setupSignUpRoute();
+  this.setupSignUpRoute(),
+  this.setupRegisterRoute()
 }
 
+private setupRegisterRoute(): void {
+  this.router.post("/register", async (req: Request, res: Response) => {
+    try {
+
+      const result = await this.controller.register(req.body);
+
+      res.status(201).json(result);
+
+    } catch (error: any) {
+
+      const status = this.controller.getStatus() || 500;
+
+      res.status(status).json({
+        success: false,
+        error: error.message
+      });
+
+    }
+  });
+}
   
   // POST /users - Create User
   

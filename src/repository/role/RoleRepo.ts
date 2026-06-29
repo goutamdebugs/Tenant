@@ -5,7 +5,9 @@ export class RoleRepo extends BaseRepo<Role>{
   constructor(){
     super(Role)
   }
-   
+   public async findById(id:number){
+    return await Role.findByPk(id);
+}
   public async findByName(name: string) { 
     try {
       return await Role.findOne({

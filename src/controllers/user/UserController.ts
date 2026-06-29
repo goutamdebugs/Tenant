@@ -7,6 +7,10 @@ import { ResponseUserDto } from "../../dtos/user/ResponseUserDto";
 import { LoginDto } from "../../dtos/user/LogInDto";
 import { ResponseDto } from "../../dtos/common/ResponseDto";
 import { signUpDto } from "../../dtos/user/SignUpDto";
+import { RegisterDto } from "../../dtos/auth/RegisterDto";
+import { ResponseRegisterDto } from "../../dtos/auth/RegisterResponseDto";
+
+
 
 @Route("users")
 @Tags("User")
@@ -15,6 +19,18 @@ export class UserController extends Controller {
   constructor(private userService: UserService = new UserService()) {
     super();
   }
+
+@Post("register")
+public async register(
+    @Body() body:RegisterDto
+):Promise<ResponseDto<ResponseRegisterDto|null>>{
+      console.log("REGISTER API HIT");
+
+    return await ResponseDto.ReturnResult(
+        ()=>this.userService.register(body)
+    );
+
+}
 
   // Create User
   @Post()

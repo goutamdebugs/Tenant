@@ -6,7 +6,9 @@ export class UserRepo extends BaseRepo<User> {
   constructor() {
     super(User)
   }
-
+  public async createUser(data:any){
+    return await User.create(data);
+}
 
   public async exists(id: number): Promise<boolean> {
     try {

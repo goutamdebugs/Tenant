@@ -12,15 +12,114 @@ import { UserValidator } from "../../validation/UserValidations";
 import bcrypt from "bcrypt";
 import { createMap } from "@automapper/core";
 import { redisClient } from "../../cacse/RedisClient";
-// import Role from "../../db/models/Role";
-
+import sequelize from "../../config/database";
+import { RegisterDto } from "../../dtos/auth/RegisterDto";
+import { ResponseRegisterDto } from "../../dtos/auth/RegisterResponseDto";
+import { TenantRepo } from "../../repository/tenant/TenantRepo";
+import Tenant from "../../db/models/Tenant";
+import { TenantResponseDto } from "../../dtos";
+import Role from "../../db/models/Role";
 export class UserService {
   // Enforcing Dependency Injection
   constructor(
     private userRepo: UserRepo = new UserRepo(),
-    private roleRepo: RoleRepo = new RoleRepo()
+    private roleRepo: RoleRepo = new RoleRepo(),
+      private tenantRepo=new TenantRepo()
   ) { }
 
+
+  public async register(
+    dto:RegisterDto
+):Promise<ResponseRegisterDto>{
+
+    return await sequelize.transaction(async(transaction)=>{
+
+        const tenantExist=
+            await this.tenantRepo.findByName(dto.companyName);
+
+        if(tenantExist){
+
+            throw new UserFriendlyException(
+                "Tenant already exists",
+                400
+            );
+
+        }
+
+        const role=
+            await this.roleRepo.findById(dto.roleId);
+
+        if(!role){
+
+            throw new UserFriendlyException(
+                "Role not found",
+                404
+            );
+
+        }
+
+        const hash=
+            await bcrypt.hash(dto.password,10);
+
+        const tenant=
+            await Tenant.create(
+                {
+                    name:dto.companyName,
+                    displayName:dto.companyDisplayName
+                },
+                {transaction}
+            );
+
+        const user=
+            await User.create(
+                {
+                    tenantId:tenant.id,
+                    name:dto.firstName,
+                    surname:dto.lastName,
+                    email:dto.email,
+                    password:hash
+                },
+                {transaction}
+            );
+
+        await user.$add(
+            "roles",
+            role,
+            {
+                transaction
+            }
+        );
+
+        const userWithRole=
+            await User.findByPk(
+                user.id,
+                {
+                    include:[Role],
+                    transaction
+                }
+            );
+
+        return {
+
+            tenant:
+            mapper.map(
+                tenant,
+                Tenant,
+                TenantResponseDto
+            ),
+
+            user:
+            mapper.map(
+                userWithRole!.get({plain:true}),
+                User,
+                ResponseUserDto
+            )
+
+        };
+
+    });
+
+}
   /**
    * Create a new user
    */
