@@ -16,5 +16,5 @@ export interface RegisterDto {
 
     password: string;
 
-    roleId:number;
+    roleName : string;
 }

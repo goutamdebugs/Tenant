@@ -30,6 +30,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.37.8",
     "sequelize-typescript": "^2.1.6",
+    "stripe": "^22.3.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "tsoa": "^6.6.0"

@@ -28,93 +28,93 @@ export class UserService {
   ) { }
 
 
-  public async register(
-    dto:RegisterDto
-):Promise<ResponseRegisterDto>{
+ public async register(
+    dto: RegisterDto
+): Promise<ResponseRegisterDto> {
 
-    return await sequelize.transaction(async(transaction)=>{
+    return await sequelize.transaction(async (transaction) => {
 
-        const tenantExist=
-            await this.tenantRepo.findByName(dto.companyName);
+        // ১. Tenant Validation
+        const tenantExist = await this.tenantRepo.findByName(dto.companyName);
 
-        if(tenantExist){
-
+        if (tenantExist) {
             throw new UserFriendlyException(
                 "Tenant already exists",
                 400
             );
+        }
+        const userExist = await this.userRepo.findByEmail(dto.email);
 
+        if (userExist) {
+            throw new UserFriendlyException(
+                "User with this email already exists",
+                409
+            );
         }
 
-        const role=
-            await this.roleRepo.findById(dto.roleId);
+        // ৩. Role Validation
+        const role = await this.roleRepo.findByName(dto.roleName);
 
-        if(!role){
-
+        if (!role) {
             throw new UserFriendlyException(
                 "Role not found",
                 404
             );
-
         }
 
-        const hash=
-            await bcrypt.hash(dto.password,10);
+        
+        const hash = await bcrypt.hash(dto.password, 10);
 
-        const tenant=
-            await Tenant.create(
-                {
-                    name:dto.companyName,
-                    displayName:dto.companyDisplayName
-                },
-                {transaction}
-            );
+        //  Create Tenant
+        const tenant = await Tenant.create(
+            {
+                name: dto.companyName,
+                displayName: dto.companyDisplayName
+            },
+            { transaction }
+        );
 
-        const user=
-            await User.create(
-                {
-                    tenantId:tenant.id,
-                    name:dto.firstName,
-                    surname:dto.lastName,
-                    email:dto.email,
-                    password:hash
-                },
-                {transaction}
-            );
+        //  Create User
+        const user = await User.create(
+            {
+                tenantId: tenant.id,
+                name: dto.firstName,
+                surname: dto.lastName,
+                email: dto.email,
+                password: hash
+            },
+            { transaction }
+        );
 
+        //  Assign Role
         await user.$add(
             "roles",
             role,
+            { transaction }
+        );
+
+        // Fetch User with Role for Response
+        const userWithRole = await User.findByPk(
+            user.id,
             {
+                include: [Role],
                 transaction
             }
         );
 
-        const userWithRole=
-            await User.findByPk(
-                user.id,
-                {
-                    include:[Role],
-                    transaction
-                }
-            );
-
+        // Return Mapped Data
         return {
-
-            tenant:
-            mapper.map(
+            tenant: mapper.map(
                 tenant,
                 Tenant,
                 TenantResponseDto
             ),
 
-            user:
-            mapper.map(
-                userWithRole!.get({plain:true}),
+            user: mapper.map(
+                userWithRole,
                 User,
                 ResponseUserDto
             )
-
         };
 
     });

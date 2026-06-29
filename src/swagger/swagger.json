@@ -174,9 +174,8 @@
 					"password": {
 						"type": "string"
 					},
-					"roleId": {
-						"type": "number",
-						"format": "double"
+					"roleName": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -187,7 +186,7 @@
 					"username",
 					"email",
 					"password",
-					"roleId"
+					"roleName"
 				],
 				"type": "object",
 				"additionalProperties": false
